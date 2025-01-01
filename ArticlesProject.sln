@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticlesProject.Core", "Art
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticlesProject.Data", "ArticlesProject.Data\ArticlesProject.Data.csproj", "{9026A556-20AB-4123-A038-2B0C0E2E7B8D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArticlesProject", "ArticlesProject\ArticlesProject.csproj", "{7575A43A-9F14-4499-89E6-365009B2043A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ArticlesProject", "ArticlesProject\ArticlesProject.csproj", "{7575A43A-9F14-4499-89E6-365009B2043A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
