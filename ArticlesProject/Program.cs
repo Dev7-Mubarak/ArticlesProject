@@ -1,4 +1,7 @@
 using ArticlesProject;
+using ArticlesProject.Core;
+using ArticlesProject.Data;
+using ArticlesProject.Data.SqlServerEF;
 using ArticlesProject.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -15,7 +18,16 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.Configure<SmtpSetting>(builder.Configuration.GetSection("SmtpSetting"));
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddSingleton<IDataHelper<Category>, CategoryEntity>();
+builder.Services.AddSingleton<IDataHelper<Author>, AuthorEntity>();
 
+builder.Services.AddMvc(op => op.EnableEndpointRouting = false);
+
+builder.Services.AddAuthorization(op =>
+{
+    op.AddPolicy("User", p => p.RequireClaim("User", "User"));
+    op.AddPolicy("Admin", p => p.RequireClaim("Admin", "Admin"));
+});
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -40,7 +52,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-
+app.UseMvcWithDefaultRoute();
 app.UseAuthorization();
 
 app.MapRazorPages();

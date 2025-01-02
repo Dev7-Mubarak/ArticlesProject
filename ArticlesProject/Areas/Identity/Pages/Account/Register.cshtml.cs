@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
+using ArticlesProject.Core;
+using ArticlesProject.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -23,13 +25,16 @@ namespace ArticlesProject.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IDataHelper<Author> _dataHelper;
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IDataHelper<Author> dataHelper)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -37,6 +42,7 @@ namespace ArticlesProject.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _dataHelper = dataHelper;
         }
 
         /// <summary>
@@ -68,6 +74,13 @@ namespace ArticlesProject.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
+            ///             [Required]
+            [EmailAddress]
+            [DataType(DataType.Text)]
+            [Display(Name = "اسمك الكامل")]
+            public string FullName { get; set; }
+
+
             [Required]
             [EmailAddress]
             [Display(Name = "ألايميل")]
@@ -115,11 +128,18 @@ namespace ArticlesProject.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+                    //Add Author
+                    var author = new Author
+                    {
+                        UserId = user.Id,
+                        FullName = Input.FullName,
+                        UserName = Input.Email,
+                    };
 
+                    _dataHelper.Add(author);
                     // Add new claim
                     Claim claim = new Claim("User", "User");
                     await _userManager.AddClaimAsync(user, claim);
-
 
 
                     var userId = await _userManager.GetUserIdAsync(user);

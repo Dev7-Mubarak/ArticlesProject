@@ -20,4 +20,13 @@
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\ArticlesProject.Core\ArticlesProject.Core.csproj" />
+	  <ProjectReference Include="..\ArticlesProject.Data\ArticlesProject.Data.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="wwwroot\Images\" />
+	</ItemGroup>
+
 </Project>
