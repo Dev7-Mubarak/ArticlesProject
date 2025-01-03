@@ -1,6 +1,7 @@
 ﻿using ArticlesProject.Core;
 using ArticlesProject.CoreView;
 using ArticlesProject.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArticlesProject.Controllers
@@ -9,17 +10,20 @@ namespace ArticlesProject.Controllers
     {
         private readonly IDataHelper<Author> _dataHelper;
         private readonly IWebHostEnvironment _webHost;
+        private readonly IAuthorizationService _authorizationService;
         private readonly FileHelper _fileHelper;
         private int _pageItem;
 
-        public AuthorController(IDataHelper<Author> dataHelper, IWebHostEnvironment webHost)
+        public AuthorController(IDataHelper<Author> dataHelper, IWebHostEnvironment webHost, IAuthorizationService authorizationService)
         {
             _dataHelper = dataHelper;
             _webHost = webHost;
             _fileHelper = new FileHelper(_webHost);
             _pageItem = 10;
+            _authorizationService = authorizationService;
         }
 
+        [Authorize("Admin")]
         // GET: AuthorController
         public ActionResult Index(int? id)
         {
@@ -31,6 +35,7 @@ namespace ArticlesProject.Controllers
             return View(data);
         }
 
+        [Authorize("Admin")]
         public ActionResult Search(string SearchItem)
         {
             if (string.IsNullOrEmpty(SearchItem))
@@ -42,6 +47,7 @@ namespace ArticlesProject.Controllers
 
         }
 
+        [Authorize]
         // GET: AuthorController/Edit/5
         public ActionResult Edit(int id)
         {
@@ -60,6 +66,7 @@ namespace ArticlesProject.Controllers
             return View(authorView);
         }
 
+        [Authorize]
         // POST: AuthorController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -81,7 +88,13 @@ namespace ArticlesProject.Controllers
                 };
 
                 _dataHelper.Update(id, author);
-                return RedirectToAction(nameof(Index));
+
+                var result = _authorizationService.AuthorizeAsync(User, "Admin");
+                if (result.Result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                return Redirect("/AdminIndex");
             }
             catch
             {
@@ -89,6 +102,7 @@ namespace ArticlesProject.Controllers
             }
         }
 
+        [Authorize("Admin")]
         // GET: AuthorController/Delete/5
         public ActionResult Delete(int id)
         {
@@ -107,6 +121,7 @@ namespace ArticlesProject.Controllers
             return View(authorView);
         }
 
+        [Authorize("Admin")]
         // POST: AuthorController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

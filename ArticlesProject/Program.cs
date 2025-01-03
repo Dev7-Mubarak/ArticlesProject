@@ -20,8 +20,9 @@ builder.Services.Configure<SmtpSetting>(builder.Configuration.GetSection("SmtpSe
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSingleton<IDataHelper<Category>, CategoryEntity>();
 builder.Services.AddSingleton<IDataHelper<Author>, AuthorEntity>();
+builder.Services.AddSingleton<IDataHelper<AuthorPost>, AuthorPostEntity>();
 
-builder.Services.AddMvc(op => op.EnableEndpointRouting = false);
+//builder.Services.AddMvc(op => op.EnableEndpointRouting = false);
 
 builder.Services.AddAuthorization(op =>
 {
@@ -31,6 +32,8 @@ builder.Services.AddAuthorization(op =>
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 
@@ -52,9 +55,15 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseMvcWithDefaultRoute();
+//app.UseMvcWithDefaultRoute();
 app.UseAuthorization();
 
-app.MapRazorPages();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+    endpoints.MapRazorPages();
+});
 
 app.Run();

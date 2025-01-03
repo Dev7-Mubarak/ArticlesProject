@@ -13,5 +13,6 @@ namespace ArticlesProject.Data.SqlServerEF
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Author> Authors { get; set; }
+        public DbSet<AuthorPost> AuthorPosts { get; set; }
     }
 }

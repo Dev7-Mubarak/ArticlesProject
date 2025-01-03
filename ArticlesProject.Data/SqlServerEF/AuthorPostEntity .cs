@@ -2,16 +2,16 @@
 
 namespace ArticlesProject.Data.SqlServerEF
 {
-    public class AuthorEntity : IDataHelper<Author>
+    public class AuthorPostEntity : IDataHelper<AuthorPost>
     {
         private DBContext _dbContext;
-        private Author _Author;
+        private AuthorPost _AuthorPost;
 
-        public AuthorEntity()
+        public AuthorPostEntity()
         {
             _dbContext = new DBContext();
         }
-        public int Add(Author enrity)
+        public int Add(AuthorPost enrity)
         {
             if (_dbContext.Database.CanConnect())
             {
@@ -22,7 +22,7 @@ namespace ArticlesProject.Data.SqlServerEF
 
             return 0;
         }
-        public int Update(int Id, Author enrity)
+        public int Update(int Id, AuthorPost enrity)
         {
             _dbContext = new DBContext();
             if (_dbContext.Database.CanConnect())
@@ -41,8 +41,8 @@ namespace ArticlesProject.Data.SqlServerEF
 
             if (_dbContext.Database.CanConnect())
             {
-                _Author = Find(Id);
-                _dbContext.Remove(_Author);
+                _AuthorPost = Find(Id);
+                _dbContext.Remove(_AuthorPost);
                 _dbContext.SaveChanges();
 
                 return 1;
@@ -51,42 +51,51 @@ namespace ArticlesProject.Data.SqlServerEF
             return 0;
         }
 
-        public Author Find(int Id)
+        public AuthorPost Find(int Id)
         {
             if (_dbContext.Database.CanConnect())
             {
-                return _dbContext.Authors.FirstOrDefault(x => x.Id == Id);
+                return _dbContext.AuthorPosts.FirstOrDefault(x => x.Id == Id);
             }
 
             return null;
         }
 
-        public IEnumerable<Author> GetAll()
+        public IEnumerable<AuthorPost> GetAll()
         {
             if (_dbContext.Database.CanConnect())
             {
-                return _dbContext.Authors;
+                return _dbContext.AuthorPosts;
             }
 
             return null;
         }
 
-        public IEnumerable<Author> GetUserById(string Id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<Author> Search(string SearchItem)
+        public IEnumerable<AuthorPost> GetUserById(string Id)
         {
             if (_dbContext.Database.CanConnect())
             {
-                return _dbContext.Authors.Where(
+                return _dbContext.AuthorPosts.Where(x => x.UserId == Id);
+            }
+
+            return null;
+        }
+
+        public IEnumerable<AuthorPost> Search(string SearchItem)
+        {
+            if (_dbContext.Database.CanConnect())
+            {
+                return _dbContext.AuthorPosts.Where(
                     x => x.FullName.Contains(SearchItem)
                     || x.UserId.ToString().Contains(SearchItem)
-                    || x.Bio.Contains(SearchItem)
-                    || x.Facbook.Contains(SearchItem)
-                    || x.Twitter.Contains(SearchItem)
-                    || x.Instragram.Contains(SearchItem)
+                    || x.UserName.Contains(SearchItem)
+                    || x.PostTitle.Contains(SearchItem)
+                    || x.PostTitle.Contains(SearchItem)
+                    || x.PostCategory.Contains(SearchItem)
+                    || x.AuthorId.ToString().Contains(SearchItem)
+                    || x.AddedDate.ToString().Contains(SearchItem)
+                    || x.Id.ToString().Contains(SearchItem)
+                    || x.CategoryId.ToString().Contains(SearchItem)
                     );
             }
 

@@ -1,9 +1,11 @@
 ﻿using ArticlesProject.Core;
 using ArticlesProject.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ArticlesProject.Controllers
 {
+    [Authorize("Admin")]
     public class CategoryController : Controller
     {
         private readonly IDataHelper<Category> _dataHelper;
@@ -34,7 +36,6 @@ namespace ArticlesProject.Controllers
             }
 
             return View(nameof(Index), _dataHelper.Search(SearchItem));
-
         }
 
         // GET: CategoryController/Create

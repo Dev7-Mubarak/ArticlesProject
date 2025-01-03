@@ -13,5 +13,7 @@ namespace ArticlesProject.Core
         [MinLength(2, ErrorMessage = "أدنئ قمية للأدخال هي حرفان")]
         [DataType(DataType.Text)]
         public required string Name { get; set; }
+
+        public virtual List<AuthorPost> AuthorPosts { get; set; }
     }
 }

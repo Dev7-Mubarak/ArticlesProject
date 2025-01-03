@@ -1,8 +1,10 @@
 ﻿@model ArticlesProject.CoreView.AuthorView
-
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService
 @{
     ViewData["Title"] = "تعديل";
     Layout = "~/Pages/Shared/_LayoutAdmin.cshtml";
+    var rseult = authorizationService.AuthorizeAsync(User, "Admin");
 }
 
 <h1 style="font-family:Cairo">تعديل بيانات الناشر</h1>
@@ -60,9 +62,14 @@
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">الرجوع للمستخدمين</a>
-</div>
+@{
+    if (rseult.Result.Succeeded)
+    {
+        <div>
+            <a asp-action="Index">الرجوع للمستخدمين</a>
+        </div>
+    }
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

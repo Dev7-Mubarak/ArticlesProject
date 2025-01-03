@@ -22,5 +22,8 @@ namespace ArticlesProject.Core
         public string? Instragram { get; set; }
         [Display(Name = " أكس")]
         public string? Twitter { get; set; }
+
+        public virtual List<AuthorPost> AuthorPosts { get; set; }
+
     }
 }

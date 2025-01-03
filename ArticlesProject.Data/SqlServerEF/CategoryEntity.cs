@@ -71,7 +71,7 @@ namespace ArticlesProject.Data.SqlServerEF
             return null;
         }
 
-        public IEnumerable<Category> GetUserById(int Id)
+        public IEnumerable<Category> GetUserById(string Id)
         {
             throw new NotImplementedException();
         }
